@@ -1,0 +1,372 @@
+from joblib.externals.cloudpickle import load
+#資料集模組
+from sklearn.datasets import load_iris
+
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+#線性迴歸 (Linear Regression)
+#from sklearn.linear_model import LinearRegression
+
+#model = LinearRegression()
+#model.fit(X_train , y_train)
+#y_pred = model.predict(X_test)
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+#載入Boston房價數據集
+data_url = "http://lib.stat.cmu.edu/datasets/boston"
+raw_df = pd.read_csv(data_url , sep="\s+" , skiprows = 22 , header = None)
+data = np.hstack([raw_df.values[::2,:] , raw_df.values[1::2 , :2]])
+target = raw_df.values[1::2,2]
+X , y = data , target
+
+#切分訓練集和測試集
+X_train , X_test , y_train , y_test = train_test_split(X , y , test_size = 0.3 , random_state=42)
+
+#創建線性回歸模型
+model = LinearRegression()
+
+#訓練模型
+model.fit(X_train , y_train)
+
+#使用模型進行預測
+y_pred = model.predict(X_test)
+
+#決策樹 (Decision Tree)
+from sklearn.tree import DecisionTreeClassifier , DecisionTreeRegressor
+
+model = DecisionTreeClassifier()
+#model.fit(X_train , y_train)
+#y_pred = model.predict(X_test)
+
+model = DecisionTreeRegressor()
+model.fit(X_train , y_train)
+y_pred = model.predict(X_test)
+
+#載入 iris 房價數據集分類問題範例：
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+#分類問題範例
+#載入iris數據集
+data = load_iris()
+
+#切分訓練集和測試集
+X_train , X_test , y_train , y_test = train_test_split(data.data , data.target , test_size = 0.3 , random_state=42)
+
+#創建分類樹模型
+clf_model = DecisionTreeClassifier()
+
+#訓練模型
+clf_model.fit(X_train , y_train)
+
+#使用模型進行預測
+y_pred_clf = clf_model.predict(X_test)
+
+#載入 Boston 房價數據集回歸問題範例：
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+
+# 回歸問題範例
+# 載入 Boston 房價數據集
+data_url = "http://lib.stat.cmu.edu/datasets/boston"
+raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
+data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+target = raw_df.values[1::2, 2]
+X, y = data, target
+
+# 切分訓練集和測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+
+# 創建回歸樹模型
+reg_model = DecisionTreeRegressor()
+
+# 訓練模型
+reg_model.fit(X_train, y_train)
+
+# 使用模型進行預測
+y_pred_reg = reg_model.predict(X_test)
+
+#隨機森林 (Random Forest)
+from sklearn.ensemble import RandomForestClassifier , RandomForestRegressor
+
+model = RandomForestClassifier()
+#model.fit(X_train , y_train)
+#y_pred = model.predict(X_test)
+
+model = RandomForestRegressor()
+model.fit(X_train , y_train)
+y_pred = model.predict(X_test)
+
+#接下來以自定義的 iris 資料集轉換成 dataframe 示範 RandomForestRegressor：
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+
+#分類問題範例
+#創建iris自定義資料集
+iris_data = {
+    'sepal_length':[5.1 , 4.9 , 4.7 , 4.6 , 5.0 , 6.2 , 6.4 , 6.0 , 6.9 , 6.3 , 5.8 , 5.4 , 5.6 , 5.1 , 5.7],
+    'sepal_width' :[3.5 , 3.0 , 3.2 , 3.1 , 3.6 , 2.9 , 2.8 , 3.0 , 3.1 , 2.5 , 2.8 , 3.0 , 2.7 , 3.8 , 2.8],
+    'petal_length':[1.4 , 1.4 , 1.3 , 1.5 , 1.4 , 4.3 , 5.6 , 4.8 , 5.1 , 5.0 , 4.0 , 4.5 , 4.2 , 1.6 , 4.5],
+    'petal_width' :[0.2 , 0.2 , 0.2 , 0.2 , 0.2 , 1.3 , 2.2 , 1.8 , 2.3 , 1.9 , 1.2 , 1.5 , 1.3 , 0.2 , 1.3],
+    'species'     :['setosa' ,'setosa','setosa','setosa','setosa','virginica','virginica','virginica','virginica','virginica','versicolor','versicolor','versicolor','versicolor','versicolor' ]
+
+}
+
+#轉換為dataframe
+iris_df = pd.DataFrame(iris_data)
+
+#將類別變量轉換為數值變量
+iris_df['species'] = pd.factorize(iris_df['species'])[0]
+
+#分割資料為訓練集與測試集
+X_train , X_test , y_train , y_test = train_test_split(iris_df.drop(columns = ['sepal_length']) , iris_df['sepal_length'] , test_size = 0.3 , random_state = 42)
+
+#創建分類森林模型
+reg_model = RandomForestRegressor()
+
+#訓練模型
+reg_model.fit(X_train , y_train)
+
+#使用模型進行預測 
+y_pred_reg = reg_model.predict(X_test)
+y_pred_reg
+
+#接下來以自定義的 iris 資料集轉換成 dataframe 示範 RandomForestClassifier：
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+# 分類問題範例
+# 創建 iris 自定義資料集
+iris_data = {
+    'sepal_length': [5.1, 4.9, 4.7, 4.6, 5.0, 6.2, 6.4, 6.0, 6.9, 6.3, 5.8, 5.4, 5.6, 5.1, 5.7],
+    'sepal_width': [3.5, 3.0, 3.2, 3.1, 3.6, 2.9, 2.8, 3.0, 3.1, 2.5, 2.8, 3.0, 2.7, 3.8, 2.8],
+    'petal_length': [1.4, 1.4, 1.3, 1.5, 1.4, 4.3, 5.6, 4.8, 5.1, 5.0, 4.0, 4.5, 4.2, 1.6, 4.5],
+    'petal_width': [0.2, 0.2, 0.2, 0.2, 0.2, 1.3, 2.2, 1.8, 2.3, 1.9, 1.2, 1.5, 1.3, 0.2, 1.3],
+    'species': ['setosa', 'setosa', 'setosa', 'setosa', 'setosa', 'virginica', 'virginica', 'virginica', 'virginica', 'virginica', 'versicolor', 'versicolor', 'versicolor', 'versicolor', 'versicolor']
+}
+
+#轉換為 dataframe
+iris_df = pd.DataFrame(iris_data)
+
+#分割資料為訓練集與測試集
+X_train , X_test , y_train , y_test = train_test_split(iris_df.drop(columns = ['species']) , iris_df['species'] , test_size = 0.3 , random_state=42)
+
+#創建分類森林模型
+clf_model = RandomForestClassifier()
+
+#訓練模型
+clf_model.fit(X_train , y_train)
+
+#使用模型進行預測
+y_pred_cf = clf_model.predict(X_test)
+y_pred_clf
+
+#支持向量機 (Support Vector Machine)
+from sklearn.svm import SVC , SVR 
+
+model = SVC()
+model.fit(X_train , y_train)
+y_pred = model.predict(X_test)
+
+model = SVR()
+#model.fit(X_train , y_train)
+#y_pred = model.predict(X_test)
+
+#以下是一個自定義的範例資料示範 SVM 分類與回歸模型的使用：
+import numpy as np
+from sklearn.svm import SVC , SVR
+from sklearn.model_selection import train_test_split
+
+#自定義範例資料
+X = np.array([ [1 , 2] , [2 , 3] , [3 , 4] , [4 , 5] ,[5 , 6],[6 , 7] ])
+y_classification = np.array([0,0,0,1,1,1])
+y_regression = np.array([1,2,3,4,5,6])
+
+#切分訓練集與測試集
+X_train , X_test , y_train_classification , y_test_classification , y_train_regression , y_test_regression = train_test_split(X , y_classification , y_regression , test_size = 0.2 , random_state=42)
+
+#使用SVM 分類器進行分類
+model = SVC()
+model.fit(X_train , y_train_classification)
+y_pred_classification = model.predict(X_test)
+
+#使用SVM迴歸器進行回歸
+model = SVR()
+model.fit(X_train , y_train_regression)
+y_pred_regression = model.predict(X_test)
+
+#K-Means 聚類 (K-Means Clustering)
+from sklearn.cluster import KMeans
+
+model = KMeans(n_clusters = 3)
+model.fit(X_train)
+y_pred = model.predict(X_test)
+
+from sklearn.datasets import load_iris
+import pandas as pd
+
+#載入iris資料集
+iris = load_iris()
+
+#轉換為pandas dataframe
+X = pd.DataFrame(iris_data , columns = iris.feature_names)
+y = iris.target
+
+#接著，我們將資料集分為訓練集和測試集：
+from sklearn.model_selection import train_test_split
+
+#X_train , X_test , y_train , y_test = train_test_split(X , y , test_size = 0.2 , random_state = 42)
+
+#然後，我們使用 KMeans 分群器對訓練集進行訓練：
+from sklearn.cluster import KMeans
+
+#建立KMeans分群器
+kmeans = KMeans(n_clusters = 3 , random_state = 42)
+
+#對訓練集進行訓練
+kmeans.fit(X_train)
+
+#對測試集進行預測
+y_pred = kmeans.predict(X_test)
+
+#主成分分析
+from sklearn.decomposition import PCA
+
+model = PCA(n_components = 2)
+X_train_pca = model.fit_transform(X_train)
+X_test_pca = model.transform(X_test)
+
+#以下示範利用PCA降維，將高維度的資料轉換為二維或更低維度的資料：
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
+
+#讀取手寫數字資料集
+digits = load_digits()
+
+#將特徵與標籤拆開
+X = digits.data
+y = digits.target
+
+#切分資料集
+X_train , X_test , y_train , y_test = train_test_split(X , y , test_size=0.2 , random_state = 42)
+
+#建立PCA模型，將64維的特徵轉換為2維
+model = PCA(n_components = 2)
+X_train_pca = model.fit_transform(X_train)
+X_test_pca = model.transform(X_test)
+
+#顯示轉換後的訓練集資料
+df = pd.DataFrame(data = X_train_pca , columns = ['PC1' ,'PC2'])
+df['target'] = y_train
+print(df.head())
+
+#Task08-02-1
+import pandas as pd
+import statsmodels.api as sm 
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.impute import SimpleImputer
+
+#讀取資料集
+df = pd.read_csv( 'https://raw.githubusercontent.com/MachineLearningLiuMing/scikit-learn-primer-guide/master/Data.csv')
+
+# 使用 SimpleImputer 填補缺失值，使用中位數填補
+imputer = SimpleImputer(strategy='median')
+df[['Age', 'Salary']] = imputer.fit_transform(df[['Age', 'Salary']])
+
+# 將 Country 欄位轉換成 one-hot encoding
+df = pd.get_dummies(df, columns=['Country'])
+
+#分割資料集為訓練資料和測試資料
+train_df = df.iloc[:7 , :]
+test_df = df.iloc[7: , :]
+
+#將資料集拆分為特徵和標籤
+X_train = train_df[['Age' , 'Salary','Country_France','Country_Germany','Country_Spain']]
+y_train = train_df['Purchased']
+X_test = test_df[['Age' , 'Salary','Country_France','Country_Germany' , 'Country_Spain']]
+
+#建立logistic regression 模型
+model = LogisticRegression(random_state=0)
+
+#訓練模型
+model.fit(X_train , y_train)
+
+#預測測試資料集的Purchased
+y_pred = model.predict(X_test)
+
+#印出後三筆資料的 Purchased
+print(y_pred)
+
+#Task08-02-2
+import pandas as pd
+import statsmodels.api as sm
+
+source = 'https://raw.githubusercontent.com/MachineLearningLiuMing/scikit-learn-primer-guide/master/Data.csv'
+
+#讀取資料集
+df = pd.read_csv(source)
+
+# 使用 SimpleImputer 填補缺失值，使用中位數填補
+imputer = SimpleImputer(strategy='median')
+df[['Age','Salary']] = imputer.fit_transform(df[['Age','Salary']])
+df['Purchased'] = df['Purchased'].replace({'No': 0, 'Yes': 1})
+#將 Country 欄位轉換成 one-hot encoding
+df = pd.get_dummies(df , columns = ['Country'])
+
+#分割資料集為訓練資料和測試資料
+train_df = df.iloc[:7 , :]
+test_df = df.iloc[7: , :]
+
+#將資料集拆分為特徵和標籤
+X_train = train_df[['Country_France' , 'Country_Germany' , 'Country_Spain' , 'Age' , 'Purchased']]
+y_train = train_df['Salary']
+
+#建立線性回歸模型
+model = sm.OLS(y_train , sm.add_constant(X_train))
+
+#訓練模型
+result = model.fit()
+
+#印出模型參數
+print(result.params)
+
+#預測測試資料集的Salary
+X_test = test_df[['Country_France', 'Country_Germany', 'Country_Spain', 'Age', 'Purchased']]
+y_pred = result.predict(sm.add_constant(X_test))
+
+#印出後三筆的 Salary
+print(y_pred[-3:])
+
+#Task08-03
+import numpy as np
+import pandas as pd
+
+X = np.array([[1, 2], [1, 4], [1, 0],
+              [4, 2], [4, 4], [4, 0]])
+
+print('===== 原始資料 =====')
+df = pd.DataFrame(X)
+from sklearn.cluster import KMeans
+
+#設定k = 3 , 4 , 5
+k_values = [3,4,5]
+
+for k in k_values:
+  kmeans = KMeans(n_clusters=k , random_state=0).fit(X)
+  print(f"當 k={k} 時，每個點所屬的群組編號：{kmeans.labels_}")
