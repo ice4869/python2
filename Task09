@@ -1,0 +1,53 @@
+import pandas as pd
+
+data = {
+    '顧客 ID': ['A', 'A', 'B', 'B', 'B', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'E', 'E', 'E', 'F', 'F', 'G', 'G'],
+    '商品名稱': ['可樂', '洋芋片', '啤酒', '花生', '餅乾', '可樂', '洋芋片', '花生', '餅乾', '可樂', '啤酒', '花生', '餅乾', '可樂', '啤酒', '餅乾', '可樂', '花生', '啤酒', '餅乾'],
+    '購買日期': ['2022/01/01', '2022/01/01', '2022/01/02', '2022/01/02', '2022/01/02', '2022/01/03', '2022/01/03', '2022/01/03', '2022/01/03', '2022/01/04', '2022/01/04', '2022/01/04', '2022/01/04', '2022/01/05', '2022/01/05', '2022/01/05', '2022/01/06', '2022/01/06', '2022/01/07', '2022/01/07']
+}
+
+df = pd.DataFrame(data)
+
+# 將資料集按照顧客 ID 及商品名稱進行分組
+grouped = df.groupby(['顧客 ID' , '商品名稱'])['購買日期'].count().reset_index()
+
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
+
+#將資料轉換成 one-hot 編碼
+hot_encoded = grouped.pivot(index = '顧客 ID' , columns = '商品名稱',values = '購買日期').fillna(0)
+
+#進行 Apriori 演算法分析
+frequent_itemsets = apriori(hot_encoded , min_support=0.2 , use_colnames=True)
+rules = association_rules(frequent_itemsets , metric = 'confidence' , min_threshold = 0.5)
+
+#按照信賴度排序並輸出結果
+rules.sort_values('confidence' , ascending = False , inplace = True)
+print(rules[['antecedents' , 'consequents' , 'support' , 'confidence']])
+
+#Task09-02
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
+dataset = [
+  ['Milk', 'Onion', 'Nutmeg', 'Kidney' 'Beans', 'Eggs', 'Yogurt'],
+  ['Dill', 'Onion', 'Nutmeg', 'Kidney' 'Beans', 'Eggs', 'Yogurt'],
+  ['Milk', 'Apple', 'Kidney' 'Beans', 'Eggs'],
+  ['Milk', 'Unicorn', 'Corn', 'Kidney' 'Beans', 'Yogurt'],
+  ['Corn', 'Onion', 'Onion', 'Kidney' 'Beans', 'Ice cream', 'Eggs'],
+]
+
+#資料前處理
+te = TransactionEncoder()
+te_ary = te.fit_transform(dataset)
+df = pd.DataFrame(te_ary , columns = te.columns_)
+
+#Apriori 分析
+frequent_itemsets = apriori(df , min_support=0.2 , use_colnames=True)
+print('Frequent Patterns:')
+print(frequent_itemsets)
+
+# Association Rules
+rules = association_rules(frequent_itemsets , metric = 'confidence' , min_threshold = 0.5)
+print('Association Rules:')
+print(rules[['antecedents' , 'consequents' , 'support' , 'confidence']])
