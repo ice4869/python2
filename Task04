@@ -1,0 +1,231 @@
+import pandas as pd
+data = pd.DataFrame({
+    'col1':[1,2,3,4],
+    'col2':[5,6,7,8],
+    'col3':[9,10,11,12],
+})
+#print(data)
+
+#選擇第一列資料
+row = data.loc[0]
+#print(row)
+
+#選擇第一列和第二列資料
+rows = data.loc[[0,1]]
+#print(rows)
+
+#選擇第一列和第二列，以及第一欄和第二欄的資料
+subset = data.loc[[0,1] , ['col1' , 'col2']]
+#print(subset)
+
+import pandas as pd
+data = pd.DataFrame({
+    'col1':[5,12,8,15] ,
+    'col2':[16,9,18,4] ,
+    'col3':[11,3,7,20] , 
+})
+
+#print(data)
+#選擇 col1 大於 10 的資料
+subset = data.query('col1 > 10')
+#print(subset)
+
+#選擇 col1 大於 10 且 col2 小於 20 的資料
+subset = data[ (data["col1"] > 10 ) & (data["col2"] < 20) ]
+#print(subset)
+
+#按照 col1 排序
+#print ( data.sort_values('col1') )
+#按照 col1和和col2 排序
+#print ( data.sort_values( ['col1' , 'col2'] ) )
+# 按照 col1 升序排列，col2 降序排列
+#print( data.sort_values(['col1' , 'col2'] , ascending=[True , False]) )
+
+import pandas as pd
+
+data = pd.DataFrame({
+    'col1':[5 , 12 , 5 , 8 , 12] , 
+    'col2':[16 , 9 , 16 , 18 , 9] , 
+    'col3':[11 , 3 , 11 , 7 , 3]
+})
+
+#print ( data.drop_duplicates() )
+
+import pandas as pd
+import numpy as np
+
+data = pd.DataFrame({
+    'col1':[5 , 12 , 8 ,np.nan] , 
+    'col2':[16 , 9 , np.nan , 4] , 
+    'col3':[11, 3, 7 , 20]
+})
+
+#檢查缺失值值
+#data.isnull()
+
+#檢查非缺失值
+#data.notnull()
+
+#將所有缺失值填充為0
+#data.fillna(0)
+
+#刪除所有含有缺失值的行
+#data.dropna()
+
+#刪除所有遺失值過多的列
+#data.dropna(thresh = 2 )
+
+#將所有缺失值填充為0
+#data.fillna(0 , inplace = True) 
+#data
+
+#將所有缺失值填充為平均值
+#data.fillna(data.mean() , inplace = True)
+#data
+
+#將所有缺失值填充為中位數
+#data.fillna(data.median() , inplace = True)
+#data
+
+#將所有缺失值填充為眾數
+#data.fillna(data.mode()[0] , inplace = True)
+#data
+
+#使用插值法填充缺失值
+#data.interpolate()
+
+import pandas as pd
+from sklearn.impute import KNNImputer
+
+data = pd.DataFrame({
+    'col1':[5 , 12 , 8 , np.nan] ,
+    'col2':[16 , 9 ,  np.nan , 4] , 
+    'col3':[11 , 3 , 7 , 20]   
+})
+
+#使用KNN算法填充缺失值
+imputer = KNNImputer(n_neighbors = 2)
+data_imputed = pd.DataFrame(imputer.fit_transform(data) , columns = data.columns)
+#data_imputed
+
+import pandas as pd
+
+#建立一個字典，包含各欄位的資料
+data_dict = {'col1':[1,2,3,4],
+             'col2':['A','B','C','D'],
+             'col3':[0.1,0.2,0.3,0.4]}
+
+#使用字典建立一個dataframe
+data = pd.DataFrame(data_dict)
+
+#查詢每個欄位的類型
+#print(data.dtypes)
+#print(data)
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+#創建一個包含類別欄位的dataframe
+df = pd.DataFrame({
+    'id':[1 , 2 , 3 , 4 , 5],
+    'category':['A' , 'B' , 'C' , 'A' , 'B']
+})
+
+#print(df)
+
+label_encoder = LabelEncoder()
+df['category_labelencoded'] = label_encoder.fit_transform(df['category'])
+#print(df)
+
+#使用 One-hot-encoding 將類別欄位轉換為數值欄位
+df_onehotencoded = pd.get_dummies(df , columns = ['category'])
+
+#print(df_onehotencoded)
+
+#Task04-02
+import numpy as np
+import pandas as pd
+raw_data = {'first_name':['Jason' , np.nan , 'Tina' , 'Jake' , 'Amy'] , 
+            'last_name':['Miller' , np.nan , 'Ali' , 'Milner' , 'Cooze'] , 
+            'age':[42 , np.nan , 36 , 24 , 73] , 
+            'sex':['m' , np.nan , 'f' , 'm' , 'f'] , 
+            'preTestScore':[4 , np.nan , np.nan , 2 , 3] , 
+            'postTestScore':[25 , np.nan , np.nan , 62 , 70]}
+df = pd.DataFrame(raw_data , columns = ['first_name' ,'last_name' ,'age' ,'sex' ,'preTestScore' ,'postTestScore'])
+#Drop missing observations
+#df.dropna(inplace = True) 
+#print(df)
+
+#Drop rows where all cells in that row is NA
+#df.dropna(how = "all" , inplace = True)
+#print(df)
+
+#Create a new column full of missing values
+#df['new_col'] = np.nan
+#print(df)
+
+#Fill in missing data with zeros
+#df.fillna(0 , inplace = True)
+#print(df)
+
+#Fill in missing in preTestScore with the mean value of preTestScore
+#preTestScore_mean = df['preTestScore'].mean()
+#df['preTestScore'].fillna(preTestScore_mean , inplace = True)
+#print(df)
+
+#Fill in missing in postTestScore with each sex’s mean value of postTestScore
+#postTestScore_mean_by_sex = df.groupby('sex')['postTestScore'].transform('mean')
+#df['postTestScore'].fillna(postTestScore_mean_by_sex , inplace = True)
+#print(df)
+
+#Select some rows but ignore the missing data points
+#df_filtered = df.dropna()
+#selected_rows = df_filtered[df_filtered['sex']=='f']
+#print(selected_rows)
+
+#Task04-03
+import pandas as pd
+
+#讀取資料集
+url = 'https://raw.githubusercontent.com/selva86/datasets/master/Cars93_miss.csv'
+df = pd.read_csv(url)
+
+#計算每個欄位中的缺失值數量
+missing_values_count = df.isnull().sum()
+
+#找出最大的缺失值數量
+max_missing_values = missing_values_count.max()
+
+print('每個欄位中的缺失值數量：')
+print(missing_values_count)
+print('\n最大的缺失值數量 :' , max_missing_values)
+
+#計算數值型欄位的平均值
+mean_values = df.mean()
+
+#使用平均值替換缺失值
+df.fillna(mean_values , inplace=True)
+
+#顯示更新後的DataFrame
+print('以平均值替換缺失值後的DataFrame:')
+print(df.head())
+
+# 使用'Manufacturer'欄位對欄位對DataFrame進行分組，並計算'Price'欄位的平均值
+avg_price_by_manufacturer = df.groupby('Manufacturer')['Price'].mean()
+
+#顯示不同製造商的平均價格
+print('不同製造商的平均價格:')
+print(avg_price_by_manufacturer)
+
+# 定義一個函數，將缺失值替換為相應製造商的平均價格
+def fillna_with_mean(row):
+  if pd.isna(row['Price']):
+    return avg_price_by_manufacturer[row['Manufacturer']]
+  else:
+    return row['Price']
+
+#應用函數來填充'Price'欄位中的缺失值
+df['Price'] = df.apply(fillna_with_mean , axis = 1)
+
+#顯示更新後的DataFrame
+print('已使用製造商的平均價格填充缺失值的DataFrame:')
+print(df.head())
