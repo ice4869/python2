@@ -1,0 +1,171 @@
+import seaborn as sns
+iris = sns.load_dataset('iris')
+iris.head()
+
+import matplotlib.pyplot as plt
+#繪製散佈圖
+#plt.scatter(iris['sepal_length'] , iris['sepal_width'])
+#plt.xlabel('Sepal Length')
+#plt.ylabel('Sepal Width')
+#plt.show()
+
+#繪製線圖
+#plt.plot(iris['sepal_length'] , label = 'Sepal Length')
+#plt.plot(iris['sepal_width'] , label = 'Sepal Width')
+#plt.xlabel('Index')
+#plt.ylabel('Value')
+#plt.legend()
+#plt.show()
+
+#繪製直方圖
+#plt.hist(iris['sepal_length'])
+#plt.xlabel('Sepal Length')
+#plt.ylabel('Frequency')
+#plt.show()
+
+#繪製散佈圖
+#sns.scatterplot(x = 'sepal_length' , y = 'sepal_width' , data = iris)
+#plt.show()
+
+#繪製線圖
+#sns.lineplot(data = iris[['sepal_length' , 'sepal_width']])
+#plt.show()
+
+#繪製直方圖
+#sns.histplot(data = iris , x = 'sepal_length')
+#plt.show()
+
+#異常值檢測
+import numpy as np
+
+#創建一個隨機數組
+#data = np.random.randn(100)
+
+#計算每個數據點的 Z 分數
+#z_scores = (data - np.mean(data)) / np.std(data)
+
+#設置閥值
+#threshold = 3
+
+#找到所有 Z 分數大於閥值的數據點
+#outliers = np.where(np.abs(z_scores) > threshold)[0]
+
+#print(outliers)
+
+#特徵轉換
+import pandas as pd
+
+#創建一個包含5個數字的的 DataFrame
+#df = pd.DataFrame({'numbers':[1,7,15,23,33]})
+
+#使用cut函數劃分為劃分為2個等區間
+#df['bins'] = pd.cut(df['numbers'] , bins = 2)
+
+#查看結果
+#print(df)
+
+#創建一個包含 Missing Value 的 DataFrame
+#df = pd.DataFrame({'Age':[22 , 38 , 26 , 35 , 35 , np.nan ,54 , 2, 27 , 14]})
+
+#使用 qcut 函數將數值型特徵轉換成等頻分箱
+#df['Age_binned'] = pd.qcut(df['Age'] , q = 4 , labels = False)
+
+#print(df[['Age' , 'Age_binned']].head(10) )
+
+#特徵縮放
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import Normalizer
+import numpy as np
+
+#創建一個隨機數組
+#data = np.random.randn(100 , 2)
+
+#最小-最大縮放
+#scaler_minmax = MinMaxScaler()
+#data_minmax = scaler_minmax.fit_transform(data)
+
+# Z-score 縮放
+#scaler_zscore = StandardScaler()
+#data_zscore = scaler_zscore.fit_transform(data)
+
+#正則化
+#scaler_norm = Normalizer()
+#data_norm = scaler_norm.fit_transform(data)
+
+#print(data_minmax.shape)
+#print(data_zscore.shape)
+#print(data_norm.shape)
+
+#特徵選擇
+import pandas as pd
+import numpy as np
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_regression
+
+# 加載波士頓房價數據集
+#data_url = "http://lib.stat.cmu.edu/datasets/boston"
+#raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
+#data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+#target = raw_df.values[1::2, 2]
+#X, y = data, target
+
+# 過濾法特徵選擇
+#selector = SelectKBest(f_regression, k=5)
+#X_new = selector.fit_transform(X, y)
+
+#print(X_new.shape)
+
+#Task05-02
+import numpy as np
+import pandas as pd
+
+#生成一個包含筆隨機數的 DataFrame
+#df = pd.DataFrame(np.random.random(100)*100 , columns = ['原始欄位'])
+
+#輸入要切分成的類別數量
+#n = int(input("請輸入要切分成的類別數量："))
+
+#使用 cut 函式進行資料切分
+#df['切分後欄位'] = pd.qcut(df['原始欄位'] , q = n , labels=False)
+
+#顯示切分後的結果顯示切分後的結果
+#print(df)
+
+#Task05-03
+import pandas as pd
+import numpy as np
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+#載入 iris資料集並轉換成 DataFrame
+iris = load_iris()
+#df = pd.DataFrame(data = np.c_[iris['data'],iris['target']] , columns = iris['feature_name']+['target'])
+df = pd.DataFrame(data= np.c_[iris['data'], iris['target']],
+                     columns= iris['feature_names'] + ['target'])
+
+#使用 scatter plot 繪製 Sepal Length vs Sepal Width
+plt.scatter(df['sepal length (cm)'] , df['sepal width (cm)' ])
+plt.xlabel('Sepal Length (cm)')
+plt.ylabel('Sepal Width (cm)')
+plt.title('Sepal Length vs Sepal Width')
+plt.show()
+
+#使用 scatter plot 繪製 Petal Length vs Petal Width
+plt.scatter(df['petal length (cm)'] , df['petal width (cm)' ])
+plt.xlabel('Petal Length (cm)')
+plt.ylabel('Petal Width (cm)')
+plt.title('Petal Length vs Petal Width')
+plt.show()
+
+pd.plotting.scatter_matrix(df , figsize=(10 , 10) , diagonal = "hist" , alpha = 0.8 ,c = df['target'])
+plt.show()
+
+#計算相關係數矩陣
+corr_matrix = df.corr()
+
+#使用熱力圖視覺化相關係數矩陣
+sns.heatmap(corr_matrix , annot = True , cmap = 'coolwarm')
+plt.title('Correlation Matrix of Sepal and Petal Features')
+plt.show()
